@@ -1,0 +1,51 @@
+#calendar div {
+    transform-origin: center;
+}
+
+.calendar-transition {
+    transition: all 0.35s ease;
+}
+
+.slide-right-start {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.slide-left-start {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.slide-active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#monthDropdown,
+#yearDropdown {
+    z-index: 9999;
+}
+
+#calendarContainer button:hover {
+    box-shadow: 0 0 10px rgba(124, 252, 0, 0.6);
+    transition: 0.3s ease;
+}
+
+.date-message {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #7CFC00;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.4s ease;
+}
+
+.date-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.date-message.fade-out {
+    opacity: 0;
+    transform: translateY(-5px);
+}

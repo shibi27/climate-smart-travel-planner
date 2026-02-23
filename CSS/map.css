@@ -1,0 +1,14 @@
+.leaflet-marker-icon.destination-glow {
+    filter: drop-shadow(0 0 8px #7CFC00);
+}
+
+.leaflet-marker-icon.source-glow:hover {
+    filter: drop-shadow(0 0 12px #ff1744) drop-shadow(0 0 20px #ff5252);
+    transition: 0.3s ease;
+}
+
+.leaflet-marker-icon.marker-drop {
+    animation: markerDrop 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+        markerShadow 0.42s ease-out;
+}
+

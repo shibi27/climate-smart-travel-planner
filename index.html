@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>ClimaRoute</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./CSS/animation.css">
+    <link rel="stylesheet" href="./CSS/base.css">
+    <link rel="stylesheet" href="./CSS/calendar.css">
+    <link rel="stylesheet" href="./CSS/components.css">
+    <link rel="stylesheet" href="./CSS/layout.css">
+    <link rel="stylesheet" href="./CSS/map.css">
+    <link rel="stylesheet" href="./CSS/themes.css">
+    <link rel="stylesheet" href="./CSS/themes.css">
+</head>
+
+<body>
+    <div id="calendarOverlay" class="hidden"></div>
+    <div id="rainEffect"></div>
+    <header>ClimaRoute</header>
+
+    <div id="map"></div>
+    <div class="card">
+
+        <label>Your Location</label>
+        <div class="relative">
+            <input type="text" id="yourLocation" placeholder="Enter your city">
+            <div id="fromSuggestions" class="suggestion-box hidden absolute w-full"></div>
+        </div>
+        <label>Destination City</label>
+        <div class="relative">
+            <input type="text" id="destination" placeholder="Enter destination city">
+            <div id="toSuggestions" class="suggestion-box hidden absolute w-full"></div>
+        </div>
+        <label>Journey Date</label>
+
+        <div class="relative">
+
+            <!-- Date Input -->
+            <input type="text" id="journeyDate" placeholder="DD-MM-YYYY"
+                class="w-full p-4 pr-12 rounded-xl bg-white text-black text-lg outline-none">
+
+            <!-- Calendar Icon -->
+            <span onclick="toggleCalendar()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-black text-xl">
+                📅
+            </span>
+
+            <!-- Calendar Popup -->
+            <div id="calendarContainer"
+                class="hidden absolute right-12 top-1/2 -translate-y-1/2 bg-slate-800 p-4 rounded-2xl shadow-2xl z-50 w-80">
+
+
+
+
+                <!-- Header -->
+                <div
+                    class="flex justify-between items-center mb-4 p-3 rounded-xl backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg">
+                    <button onclick="prevMonth()" id="prevBtn"
+                        class="text-slate-400 hover:text-white text-xl">❮</button>
+
+                    <div class="flex gap-2 items-center">
+                        <button onclick="toggleMonthDropdown()" id="monthBtn"
+                            class="text-white font-semibold hover:text-green-400"></button>
+
+                        <button onclick="toggleYearDropdown()" id="yearBtn"
+                            class="text-white font-semibold hover:text-green-400"></button>
+                    </div>
+
+                    <button onclick="nextMonth()" class="text-slate-400 hover:text-white text-xl">❯</button>
+                </div>
+
+                <div id="monthDropdown"
+                    class="hidden absolute top-14 left-0 bg-slate-700 p-4 rounded-xl grid grid-cols-3 gap-2 w-full z-50">
+                </div>
+
+                <div id="yearDropdown"
+                    class="hidden absolute top-14 left-0 bg-slate-700 p-4 rounded-xl grid grid-cols-2 gap-2 w-full z-50">
+                </div>
+
+
+                <!-- Days -->
+                <div class="grid grid-cols-7 text-center text-slate-400 text-sm mb-2">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+
+                <!-- Dates -->
+                <div id="calendar" class="grid grid-cols-7 gap-2 text-center"></div>
+
+            </div>
+        </div>
+        <div id="dateCorrectionMessage" class="date-message hidden">
+            🔄 Past date corrected to today
+        </div>
+
+
+
+        <label>Climate Priority</label>
+        <select id="priority">
+            <option value="1">Low</option>
+            <option value="2">Balanced</option>
+            <option value="3">High</option>
+        </select>
+        <label class="mt-4 block">Nearby Places</label>
+        <div class="flex justify-between items-center mt-2 mb-2">
+            <span class="text-sm opacity-70">Choose categories</span>
+            <button type="button" id="selectAllBtn" onclick="toggleSelectAll()"
+                class="text-sm px-3 py-1 rounded-lg bg-green-500 text-black font-semibold hover:scale-105 transition">
+                Select All
+            </button>
+        </div>
+
+        <div class="flex gap-3 mt-2">
+
+            <button type="button" onclick="setCategory('restaurant')" class="category-btn" id="btn-restaurant">
+                🍽 Restaurants
+            </button>
+
+            <button type="button" onclick="setCategory('hotel')" class="category-btn" id="btn-hotel">
+                🏨 Hotels
+            </button>
+
+            <button type="button" onclick="setCategory('cafe')" class="category-btn" id="btn-cafe">
+                ☕ Cafés
+            </button>
+
+        </div>
+        <label class="mt-4 block">Search Radius: <span id="radiusValue">3</span> km</label>
+
+        <input type="range" id="radiusSlider" min="3000" max="10000" step="1000" value="3000" class="w-full mt-2">
+
+        <button id="generateButton" onclick="generatePlan()">Generate Smart Plan</button>
+
+
+        <div id="placeSummary" class="mt-3 text-sm opacity-80"></div>
+        <div class="result" id="output"></div>
+
+    </div>
+
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="JS/markers.js"></script>
+    <script src="JS/map.js"></script>
+    <script src="JS/calendar.js"></script>
+    <script src="JS/validation.js"></script>
+    <script src="JS/places.js"></script>
+    <script src="JS/autocomplete.js"></script>
+    <script src="JS/generatePlan.js"></script>
+    <script src="JS/main.js"></script>
+</body>
+
+</html>
