@@ -17,7 +17,7 @@
 ## ✨ Live Demo
 
 🔗 **Live Website:**  
-👉 https://shibi27.github.io/climate-smart-travel-planner/
+👉 https://climate-route.netlify.app/
 
 ---
 
