@@ -121,4 +121,4 @@ document.getElementById("radiusSlider").addEventListener("input", function () {
     if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
         fetchNearbyPlaces(window.lastDestinationLat, window.lastDestinationLon);
     }
-});
+}); 

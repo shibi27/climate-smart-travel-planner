@@ -29,7 +29,7 @@ function toggleCalendar() {
 
 function renderCalendar(direction = "right") {
 
-    calendar.classListF.remove(
+    calendar.classList.remove(
         "slide-right-start",
         "slide-left-start",
         "slide-active"
