@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" rx="14" fill="#0f2027"/>
+
+  <!-- CR Text -->
+  <text x="50%" y="55%" 
+        text-anchor="middle" 
+        font-family="Segoe UI, Arial, sans-serif" 
+        font-size="28" 
+        font-weight="700" 
+        fill="#ffffff">
+    CR
+  </text>
+
+  <!-- Route Curve -->
+  <path d="M10 44 Q32 20 54 36" 
+        stroke="#7CFC00" 
+        stroke-width="3" 
+        fill="none" 
+        stroke-linecap="round"/>
+
+  <!-- Destination Dot -->
+  <circle cx="54" cy="36" r="4" fill="#7CFC00"/>
+</svg>
