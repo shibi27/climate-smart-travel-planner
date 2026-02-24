@@ -1,12 +1,23 @@
 # 🌍 Climate-Smart Travel Planner
 
-> An intelligent travel planning web application that combines **real-time weather analysis**, **smart route optimization**, and **nearby place discovery** into one premium interactive experience.
+<p align="center">
+  <b>Intelligent • Climate-Aware • Interactive • Premium UI</b>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Active-success" />
+  <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-blue" />
+  <img src="https://img.shields.io/badge/Maps-Leaflet.js-green" />
+  <img src="https://img.shields.io/badge/API-Open--Meteo%20%7C%20OSRM%20%7C%20Photon-orange" />
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
+</p>
 
 ---
 
 ## ✨ Live Demo
 
-🔗 [_Add your deployed link here_](https://shibi27.github.io/climate-smart-travel-planner/)
+🔗 **Live Website:**  
+👉 https://shibi27.github.io/climate-smart-travel-planner/
 
 ---
 
