@@ -56,3 +56,27 @@ footer {
     font-size: 14px;
     opacity: 0.7;
 }
+
+.mobile-toggle {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #7CFC00;
+    color: #003300;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (min-width: 769px) {
+    .mobile-toggle {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 70px; /* space for bottom nav */
+    }
+}

@@ -14,14 +14,23 @@
     <link rel="stylesheet" href="./CSS/layout.css">
     <link rel="stylesheet" href="./CSS/map.css">
     <link rel="stylesheet" href="./CSS/themes.css">
+    <link rel="manifest" href="manifest.json ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7CFC00">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
 </head>
 
 <body>
     <div id="calendarOverlay" class="hidden"></div>
     <div id="rainEffect"></div>
     <header>ClimaRoute</header>
-
+    <button id="installBtn" class="install-btn hidden">
+        📲 Install App
+    </button>
+    <button id="toggleMapBtn" class="mobile-toggle hidden">
+        🗺 Hide Map
+    </button>
     <div id="map"></div>
     <div class="card">
 
@@ -155,6 +164,11 @@
     <script src="./JS/autocomplete.js"></script>
     <script src="./JS/generatePlan.js"></script>
     <script src="./JS/main.js"></script>
+    <nav class="bottom-nav hidden">
+        <button onclick="scrollToMap()">🗺 Map</button>
+        <button onclick="scrollToForm()">📝 Plan</button>
+        <button onclick="scrollToResults()">📊 Results</button>
+    </nav>
 </body>
 
 </html>

@@ -233,3 +233,50 @@
         width: 100%;
     }
 }
+
+@media (max-width: 768px) {
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: rgba(15, 32, 39, 0.95);
+        display: flex;
+        justify-content: space-around;
+        padding: 12px 0;
+        z-index: 1100;
+    }
+
+    .bottom-nav button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+    }
+}
+
+
+.install-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #7CFC00, #b2ffb2);
+    color: #003300;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1200;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width:768px) {
+    .install-btn {
+        top: 12px;
+        right: 12px;
+        font-size: 14px;
+    }
+}

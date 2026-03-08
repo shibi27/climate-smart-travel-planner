@@ -82,3 +82,11 @@ option {
 html, body {
     overflow-x: hidden;
 }
+
+@media (max-width: 768px) {
+    button,
+    input,
+    select {
+        min-height: 48px;
+    }
+}
