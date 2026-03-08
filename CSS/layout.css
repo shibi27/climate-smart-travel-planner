@@ -5,6 +5,21 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
+@media (max-width: 1024px) {
+    #map {
+        height: 300px;
+        margin: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    #map {
+        height: 250px;
+        margin: 10px;
+        border-radius: 16px;
+    }
+}
+
 .card {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
@@ -14,6 +29,20 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 1024px) {
+    .card {
+        padding: 20px;
+        margin: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        padding: 16px;
+        margin: 10px;
+        border-radius: 16px;
+    }
+}
 .result {
     margin-top: 20px;
     padding: 15px;

@@ -223,3 +223,13 @@
     text-align: center;
     animation: fadeIn 0.4s ease-in-out;
 }
+
+@media (max-width: 768px) {
+    .flex.gap-3.mt-2 {
+        flex-direction: column;
+    }
+
+    .category-btn {
+        width: 100%;
+    }
+}
