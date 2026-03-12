@@ -16,7 +16,7 @@
 
 ## Live Demo
 🔗 **Live Website:**  
-👉 https://climaroute-planner.vv.app/
+👉 https://climaroute.vercel.app/
 
 ---
 
