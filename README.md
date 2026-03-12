@@ -16,7 +16,7 @@
 
 ## Live Demo
 🔗 **Live Website:**  
-👉 https://climateroute-planner.netlify.app/
+👉 https://climaroute-planner.netlify.app/
 
 ---
 
