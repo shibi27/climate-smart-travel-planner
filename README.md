@@ -1,10 +1,10 @@
 # Climate-Smart Travel Planner
 
-<p>
+<p align="center"> 
   <b>Intelligent • Climate-Aware • Interactive • Premium UI</b>
 </p>
 
-<p>
+<p  align="center">
   <img src="https://img.shields.io/badge/Status-Active-success" />
   <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-blue" />
   <img src="https://img.shields.io/badge/Maps-Leaflet.js-green" />
