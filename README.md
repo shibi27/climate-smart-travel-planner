@@ -1,4 +1,4 @@
-# 🌍 Climate-Smart Travel Planner
+# Climate-Smart Travel Planner
 
 <p align="center">
   <b>Intelligent • Climate-Aware • Interactive • Premium UI</b>
@@ -14,56 +14,55 @@
 
 ---
 
-## ✨ Live Demo
-
+## Live Demo
 🔗 **Live Website:**  
-👉 https://climate-route.netlify.app/
+👉 https://climateroute-planner.netlify.app/
 
 ---
 
-## 🚀 Overview
+## Overview
 
 Climate-Smart Travel Planner helps users make smarter travel decisions by analyzing:
 
-- 🛣 Road distance & estimated travel time  
-- 🌡 Temperature forecast  
-- 💨 Wind speed  
-- 🌧 Rain probability  
-- ⚠️ Climate risk warnings (Heatwave / Storm / Heavy Rain)  
-- 🍽 Nearby restaurants, hotels, cafés (with adjustable radius)
+- Road distance & estimated travel time  
+- Temperature forecast  
+- Wind speed  
+- Rain probability  
+- Climate risk warnings (Heatwave / Storm / Heavy Rain)  
+- Nearby restaurants, hotels, cafés (with adjustable radius)
 
 It dynamically updates UI effects based on climate conditions and provides a premium, modern travel planning experience.
 
 ---
 
-## 🎯 Key Features
+## Key Features
 
-### 🌦 Smart Climate Analysis
+### Smart Climate Analysis
 - Fetches weather forecast using Open-Meteo API
 - Detects heatwaves, storms, and heavy rain
 - Displays dynamic warning cards
 - Background changes based on weather conditions
 
-### 🗺 Intelligent Routing
+### Intelligent Routing
 - Real road route calculation using OSRM
 - Accurate travel distance & duration
 - Smooth route animation
 - Professional source & destination markers
 
-### 🍽 Nearby Place Discovery
+### Nearby Place Discovery
 - Restaurants, Hotels, Cafés
 - Multi-select category filtering
 - Adjustable radius (3km – 10km)
 - Marker clustering
 - Result summary count
 
-### 📅 Premium Calendar
+### Premium Calendar
 - Custom future-only date picker
 - Auto-correct past dates
 - Smooth month transitions
 - Glassmorphism UI
 
-### 🎨 Premium UI/UX
+### Premium UI/UX
 - Glassmorphism design
 - Dynamic glow effects
 - Animated marker drop & bounce
@@ -72,7 +71,7 @@ It dynamically updates UI effects based on climate conditions and provides a pre
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |------------|----------|
