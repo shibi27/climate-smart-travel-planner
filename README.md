@@ -174,13 +174,13 @@ This modular architecture ensures:
 
 #  How It Works
 
-* 1️⃣ User enters **source and destination**
-* 2️⃣  **Photon API** converts locations into coordinates
-* 3️⃣ **OSRM** calculates optimal road route
-* 4️⃣ **Open-Meteo API** fetches weather forecast
-* 5️⃣ System detects climate risks
-* 6️⃣ **Overpass API** fetches nearby places
-* 7️⃣ UI dynamically updates results and map markers
+* User enters **source and destination**
+* **Photon API** converts locations into coordinates
+* **OSRM** calculates optimal road route
+* **Open-Meteo API** fetches weather forecast
+* System detects climate risks
+* **Overpass API** fetches nearby places
+* UI dynamically updates results and map markers
 
 ---
 
