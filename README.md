@@ -166,9 +166,9 @@ ClimaRoute/
 
 This modular architecture ensures:
 
-  Maintainability
-  Scalability
-  Clean separation of concerns
+* Maintainability
+* Scalability
+* Clean separation of concerns
 
 ---
 
