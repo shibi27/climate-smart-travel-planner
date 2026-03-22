@@ -34,9 +34,9 @@ toggleBtn?.addEventListener("click", () => {
     mapEl.classList.toggle("collapsed");
 
     if (mapEl.classList.contains("collapsed")) {
-        toggleBtn.innerText = "🗺 Show Map";
+        toggleBtn.innerText = "🧭 Show Map";
     } else {
-        toggleBtn.innerText = "🗺 Hide Map";
+        toggleBtn.innerText = "🧭 Hide Map";
     }
 
 });
