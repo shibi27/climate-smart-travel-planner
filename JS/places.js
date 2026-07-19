@@ -11,12 +11,10 @@ async function fetchNearbyPlaces(lat, lon) {
 
     for (let category of selectedCategories) {
 
-        let query = `
-            [out:json];
-            node["amenity"="${category}"]
-            (around:${searchRadius}, ${lat}, ${lon});
-            out;
-        `;
+        let query = `[out:json];
+node["amenity"="${category}"](around:${searchRadius},${lat},${lon});
+out;`;
+
 
         try {
 
