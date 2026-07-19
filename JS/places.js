@@ -2,6 +2,12 @@ let selectedCategories = new Set();
 let placeMarkers = [];
 let searchRadius = 3000;
 
+const OVERPASS_SERVERS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.private.coffee/api/interpreter"
+];
+
 async function fetchNearbyPlaces(lat, lon) {
 
     if (selectedCategories.size === 0) return;
@@ -11,30 +17,67 @@ async function fetchNearbyPlaces(lat, lon) {
 
     for (let category of selectedCategories) {
 
-        let query = `
-            [out:json];
-            node["amenity"="${category}"]
-            (around:${searchRadius}, ${lat}, ${lon});
-            out;
-        `;
+        const query = `
+[out:json][timeout:25];
+node["amenity"="${category}"](around:${searchRadius},${lat},${lon});
+out;
+`;
 
-        let response = await fetch(
-            "https://overpass.kumi.systems/api/interpreter",
-            {
-                method: "POST",
-                body: query
+        let data = null;
+
+        for (const server of OVERPASS_SERVERS) {
+
+            try {
+
+                console.log("Trying:", server);
+
+                const response = await fetch(server, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: query
+                });
+
+                if (!response.ok) {
+                    console.warn(`${server} returned ${response.status}`);
+                    continue;
+                }
+
+                data = await response.json();
+
+                console.log(
+                    `${server} returned ${data.elements.length} ${category}(s)`
+                );
+
+                break;
+
+            } catch (err) {
+
+                console.error(`${server} failed`, err);
+
             }
-        );
+        }
 
-        let data = await response.json();
+        if (!data || !data.elements) {
+            console.error("All Overpass servers failed.");
+            continue;
+        }
 
         data.elements.forEach(place => {
 
             let iconToUse = orangeIcon;
-            if (category === "hotel") iconToUse = violetIcon;
-            if (category === "cafe") iconToUse = brownIcon;
 
-            let marker = L.marker([place.lat, place.lon], { icon: iconToUse })
+            if (category === "hotel")
+                iconToUse = violetIcon;
+
+            if (category === "cafe")
+                iconToUse = brownIcon;
+
+            const marker = L.marker(
+                [place.lat, place.lon],
+                { icon: iconToUse }
+            )
                 .addTo(map)
                 .bindPopup(`
                     <b>${place.tags.name || "Unnamed"}</b><br>
@@ -42,8 +85,11 @@ async function fetchNearbyPlaces(lat, lon) {
                 `);
 
             placeMarkers.push(marker);
+
         });
     }
+
+    console.log("Nearby markers added:", placeMarkers.length);
 }
 
 function setCategory(category) {
@@ -51,29 +97,37 @@ function setCategory(category) {
     const button = document.getElementById("btn-" + category);
 
     if (selectedCategories.has(category)) {
+
         selectedCategories.delete(category);
         button.classList.remove("active");
+
     } else {
+
         selectedCategories.add(category);
         button.classList.add("active");
+
     }
 
     clearResults();
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
+    if (window.lastDestinationLat &&
+        window.lastDestinationLon &&
+        selectedCategories.size > 0) {
+
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
         );
     }
+
     const selectAllBtn = document.getElementById("selectAllBtn");
 
-    if (selectedCategories.size === 3) {
-        selectAllBtn.innerText = "Clear All";
-    } else {
-        selectAllBtn.innerText = "Select All";
-    }
+    selectAllBtn.innerText =
+        selectedCategories.size === 3
+            ? "Clear All"
+            : "Select All";
 }
+
 function toggleSelectAll() {
 
     const allCategories = ["restaurant", "hotel", "cafe"];
@@ -83,19 +137,22 @@ function toggleSelectAll() {
 
         selectedCategories.clear();
 
-        allCategories.forEach(cat => {
+        allCategories.forEach(cat =>
             document.getElementById("btn-" + cat)
-                .classList.remove("active");
-        });
+                .classList.remove("active")
+        );
 
         selectAllBtn.innerText = "Select All";
 
     } else {
 
         allCategories.forEach(cat => {
+
             selectedCategories.add(cat);
+
             document.getElementById("btn-" + cat)
                 .classList.add("active");
+
         });
 
         selectAllBtn.innerText = "Clear All";
@@ -103,7 +160,10 @@ function toggleSelectAll() {
 
     clearResults();
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
+    if (window.lastDestinationLat &&
+        window.lastDestinationLon &&
+        selectedCategories.size > 0) {
+
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
@@ -111,14 +171,23 @@ function toggleSelectAll() {
     }
 }
 
-document.getElementById("radiusSlider").addEventListener("input", function () {
+document.getElementById("radiusSlider")
+    .addEventListener("input", function () {
 
-    searchRadius = parseInt(this.value);
-    document.getElementById("radiusValue").innerText = searchRadius / 1000;
+        searchRadius = parseInt(this.value);
 
-    clearResults();
+        document.getElementById("radiusValue").innerText =
+            searchRadius / 1000;
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
-        fetchNearbyPlaces(window.lastDestinationLat, window.lastDestinationLon);
-    }
-}); 
+        clearResults();
+
+        if (window.lastDestinationLat &&
+            window.lastDestinationLon &&
+            selectedCategories.size > 0) {
+
+            fetchNearbyPlaces(
+                window.lastDestinationLat,
+                window.lastDestinationLon
+            );
+        }
+    });
