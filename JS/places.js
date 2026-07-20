@@ -21,13 +21,18 @@ out;`;
         try {
 
             const response = await fetch(
-                "https://overpass-api.de/api/interpreter",
+                "/api/places",
                 {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        "Content-Type": "application/json"
                     },
-                    body: "data=" + encodeURIComponent(query)
+                    body: JSON.stringify({
+                        lat,
+                        lon,
+                        radius: searchRadius,
+                        category
+                    })
                 }
             );
 
