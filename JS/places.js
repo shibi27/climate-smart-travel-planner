@@ -15,6 +15,8 @@ async function fetchNearbyPlaces(lat, lon) {
 node["amenity"="${category}"](around:${searchRadius},${lat},${lon});
 out;`;
 
+        console.log("Query:");
+        console.log(query);
 
         try {
 
@@ -22,27 +24,49 @@ out;`;
                 "https://overpass-api.de/api/interpreter",
                 {
                     method: "POST",
-                    body: query
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "data=" + encodeURIComponent(query)
                 }
             );
 
             console.log("Status:", response.status);
 
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Overpass Error:");
+                console.error(errorText);
+                continue;
+            }
+
             const data = await response.json();
-            console.log(data);
+            console.log("Response:", data);
+
+            if (!data.elements || data.elements.length === 0) {
+                console.log("No nearby places found.");
+                continue;
+            }
 
             data.elements.forEach(place => {
 
                 let iconToUse = orangeIcon;
-                if (category === "hotel") iconToUse = violetIcon;
-                if (category === "cafe") iconToUse = brownIcon;
 
-                let marker = L.marker([place.lat, place.lon], { icon: iconToUse })
-                    .addTo(map)
-                    .bindPopup(`
-                        <b>${place.tags.name || "Unnamed"}</b><br>
-                        ${category.toUpperCase()}
-                    `);
+                if (category === "hotel") {
+                    iconToUse = violetIcon;
+                } else if (category === "cafe") {
+                    iconToUse = brownIcon;
+                }
+
+                let marker = L.marker(
+                    [place.lat, place.lon],
+                    { icon: iconToUse }
+                )
+                .addTo(map)
+                .bindPopup(`
+                    <b>${place.tags.name || "Unnamed"}</b><br>
+                    ${category.toUpperCase()}
+                `);
 
                 placeMarkers.push(marker);
             });
@@ -128,6 +152,9 @@ document.getElementById("radiusSlider").addEventListener("input", function () {
     clearResults();
 
     if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
-        fetchNearbyPlaces(window.lastDestinationLat, window.lastDestinationLon);
+        fetchNearbyPlaces(
+            window.lastDestinationLat,
+            window.lastDestinationLon
+        );
     }
 });
