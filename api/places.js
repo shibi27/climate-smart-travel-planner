@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -8,41 +9,48 @@ export default async function handler(req, res) {
     }
 
     if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method Not Allowed" });
+        return res.status(405).json({
+            error: "Method Not Allowed"
+        });
     }
 
     try {
 
         const { lat, lon, radius, category } = req.body;
 
-        const query = `[out:json];
-node["amenity"="${category}"](around:${radius},${lat},${lon});
-out;`;
+        const categoryMap = {
+            restaurant: "catering.restaurant",
+            hotel: "accommodation.hotel",
+            cafe: "catering.cafe"
+        };
 
-        console.log("Query:");
-        console.log(query);
+        const geoCategory = categoryMap[category];
 
-        const response = await fetch(
-            "https://overpass-api.de/api/interpreter",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain"
-                },
-                body: query
-            }
-        );
+        if (!geoCategory) {
+            return res.status(400).json({
+                error: "Invalid category"
+            });
+        }
 
-        const text = await response.text();
+        const apiKey = process.env.GEOAPIFY_API_KEY;
 
-        console.log("Status:", response.status);
-        console.log(text);
+        const url =
+            `https://api.geoapify.com/v2/places?` +
+            `categories=${geoCategory}` +
+            `&filter=circle:${lon},${lat},${radius}` +
+            `&limit=20` +
+            `&apiKey=${apiKey}`;
 
-        res.setHeader("Content-Type", response.headers.get("content-type") || "application/json");
-        return res.status(response.status).send(text);
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        return res.status(response.status).json(data);
 
     } catch (err) {
+
         console.error(err);
+
         return res.status(500).json({
             error: err.message
         });

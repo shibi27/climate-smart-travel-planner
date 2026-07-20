@@ -11,49 +11,38 @@ async function fetchNearbyPlaces(lat, lon) {
 
     for (let category of selectedCategories) {
 
-        let query = `[out:json];
-node["amenity"="${category}"](around:${searchRadius},${lat},${lon});
-out;`;
-
-        console.log("Query:");
-        console.log(query);
-
         try {
 
-            const response = await fetch(
-                "/api/places",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        lat,
-                        lon,
-                        radius: searchRadius,
-                        category
-                    })
-                }
-            );
-
-            console.log("Status:", response.status);
+            const response = await fetch("/api/places", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    lat,
+                    lon,
+                    radius: searchRadius,
+                    category
+                })
+            });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Overpass Error:");
-                console.error(errorText);
+                const error = await response.text();
+                console.error("API Error:", error);
                 continue;
             }
 
             const data = await response.json();
-            console.log("Response:", data);
 
-            if (!data.elements || data.elements.length === 0) {
-                console.log("No nearby places found.");
+            if (!data.features || data.features.length === 0) {
+                console.log(`No ${category} found.`);
                 continue;
             }
 
-            data.elements.forEach(place => {
+            data.features.forEach(place => {
+
+                const coords = place.geometry.coordinates;
+                const props = place.properties;
 
                 let iconToUse = orangeIcon;
 
@@ -63,17 +52,19 @@ out;`;
                     iconToUse = brownIcon;
                 }
 
-                let marker = L.marker(
-                    [place.lat, place.lon],
+                const marker = L.marker(
+                    [coords[1], coords[0]],
                     { icon: iconToUse }
                 )
                 .addTo(map)
                 .bindPopup(`
-                    <b>${place.tags.name || "Unnamed"}</b><br>
-                    ${category.toUpperCase()}
+                    <b>${props.name || "Unnamed"}</b><br>
+                    ${category.toUpperCase()}<br>
+                    ${props.address_line2 || ""}
                 `);
 
                 placeMarkers.push(marker);
+
             });
 
         } catch (err) {
@@ -96,7 +87,11 @@ function setCategory(category) {
 
     clearResults();
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
+    if (
+        window.lastDestinationLat &&
+        window.lastDestinationLon &&
+        selectedCategories.size > 0
+    ) {
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
@@ -122,7 +117,8 @@ function toggleSelectAll() {
         selectedCategories.clear();
 
         allCategories.forEach(cat => {
-            document.getElementById("btn-" + cat)
+            document
+                .getElementById("btn-" + cat)
                 .classList.remove("active");
         });
 
@@ -132,7 +128,8 @@ function toggleSelectAll() {
 
         allCategories.forEach(cat => {
             selectedCategories.add(cat);
-            document.getElementById("btn-" + cat)
+            document
+                .getElementById("btn-" + cat)
                 .classList.add("active");
         });
 
@@ -141,7 +138,11 @@ function toggleSelectAll() {
 
     clearResults();
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
+    if (
+        window.lastDestinationLat &&
+        window.lastDestinationLon &&
+        selectedCategories.size > 0
+    ) {
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
@@ -149,17 +150,25 @@ function toggleSelectAll() {
     }
 }
 
-document.getElementById("radiusSlider").addEventListener("input", function () {
+document
+    .getElementById("radiusSlider")
+    .addEventListener("input", function () {
 
-    searchRadius = parseInt(this.value);
-    document.getElementById("radiusValue").innerText = searchRadius / 1000;
+        searchRadius = parseInt(this.value);
 
-    clearResults();
+        document.getElementById("radiusValue").innerText =
+            searchRadius / 1000;
 
-    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
-        fetchNearbyPlaces(
-            window.lastDestinationLat,
-            window.lastDestinationLon
-        );
-    }
-});
+        clearResults();
+
+        if (
+            window.lastDestinationLat &&
+            window.lastDestinationLon &&
+            selectedCategories.size > 0
+        ) {
+            fetchNearbyPlaces(
+                window.lastDestinationLat,
+                window.lastDestinationLon
+            );
+        }
+    });
