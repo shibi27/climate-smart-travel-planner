@@ -1,6 +1,14 @@
+const API_KEY = "8e5817064b334121a014dbddf6b01912";
+
 let selectedCategories = new Set();
 let placeMarkers = [];
 let searchRadius = 3000;
+
+const categoryMap = {
+    restaurant: "catering.restaurant",
+    hotel: "accommodation.hotel",
+    cafe: "catering.cafe"
+};
 
 async function fetchNearbyPlaces(lat, lon) {
 
@@ -11,24 +19,21 @@ async function fetchNearbyPlaces(lat, lon) {
 
     for (let category of selectedCategories) {
 
+        const geoCategory = categoryMap[category];
+
+        const url =
+            `https://api.geoapify.com/v2/places?` +
+            `categories=${geoCategory}` +
+            `&filter=circle:${lon},${lat},${searchRadius}` +
+            `&limit=20` +
+            `&apiKey=${API_KEY}`;
+
         try {
 
-            const response = await fetch("/api/places", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    lat,
-                    lon,
-                    radius: searchRadius,
-                    category
-                })
-            });
+            const response = await fetch(url);
 
             if (!response.ok) {
-                const error = await response.text();
-                console.error("API Error:", error);
+                console.error("Geoapify Error:", response.status);
                 continue;
             }
 
@@ -48,7 +53,9 @@ async function fetchNearbyPlaces(lat, lon) {
 
                 if (category === "hotel") {
                     iconToUse = violetIcon;
-                } else if (category === "cafe") {
+                }
+
+                if (category === "cafe") {
                     iconToUse = brownIcon;
                 }
 
@@ -56,19 +63,19 @@ async function fetchNearbyPlaces(lat, lon) {
                     [coords[1], coords[0]],
                     { icon: iconToUse }
                 )
-                .addTo(map)
-                .bindPopup(`
-                    <b>${props.name || "Unnamed"}</b><br>
-                    ${category.toUpperCase()}<br>
-                    ${props.address_line2 || ""}
-                `);
+                    .addTo(map)
+                    .bindPopup(`
+                        <b>${props.name || "Unnamed"}</b><br>
+                        ${category.toUpperCase()}<br>
+                        ${props.address_line2 || ""}
+                    `);
 
                 placeMarkers.push(marker);
 
             });
 
         } catch (err) {
-            console.error("Fetch failed:", err);
+            console.error("Geoapify Fetch Error:", err);
         }
     }
 }
@@ -87,11 +94,7 @@ function setCategory(category) {
 
     clearResults();
 
-    if (
-        window.lastDestinationLat &&
-        window.lastDestinationLon &&
-        selectedCategories.size > 0
-    ) {
+    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
@@ -117,8 +120,7 @@ function toggleSelectAll() {
         selectedCategories.clear();
 
         allCategories.forEach(cat => {
-            document
-                .getElementById("btn-" + cat)
+            document.getElementById("btn-" + cat)
                 .classList.remove("active");
         });
 
@@ -128,8 +130,7 @@ function toggleSelectAll() {
 
         allCategories.forEach(cat => {
             selectedCategories.add(cat);
-            document
-                .getElementById("btn-" + cat)
+            document.getElementById("btn-" + cat)
                 .classList.add("active");
         });
 
@@ -138,11 +139,7 @@ function toggleSelectAll() {
 
     clearResults();
 
-    if (
-        window.lastDestinationLat &&
-        window.lastDestinationLon &&
-        selectedCategories.size > 0
-    ) {
+    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
         fetchNearbyPlaces(
             window.lastDestinationLat,
             window.lastDestinationLon
@@ -150,25 +147,17 @@ function toggleSelectAll() {
     }
 }
 
-document
-    .getElementById("radiusSlider")
-    .addEventListener("input", function () {
+document.getElementById("radiusSlider").addEventListener("input", function () {
 
-        searchRadius = parseInt(this.value);
+    searchRadius = parseInt(this.value);
+    document.getElementById("radiusValue").innerText = searchRadius / 1000;
 
-        document.getElementById("radiusValue").innerText =
-            searchRadius / 1000;
+    clearResults();
 
-        clearResults();
-
-        if (
-            window.lastDestinationLat &&
-            window.lastDestinationLon &&
-            selectedCategories.size > 0
-        ) {
-            fetchNearbyPlaces(
-                window.lastDestinationLat,
-                window.lastDestinationLon
-            );
-        }
-    });
+    if (window.lastDestinationLat && window.lastDestinationLon && selectedCategories.size > 0) {
+        fetchNearbyPlaces(
+            window.lastDestinationLat,
+            window.lastDestinationLon
+        );
+    }
+});
