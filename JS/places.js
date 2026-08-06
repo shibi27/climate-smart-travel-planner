@@ -5,6 +5,7 @@ let placeMarkers = [];
 let searchRadius = 3000;
 
 const categoryMap = {
+    
     restaurant: "catering.restaurant",
     hotel: "accommodation.hotel",
     cafe: "catering.cafe"
