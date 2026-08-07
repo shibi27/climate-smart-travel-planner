@@ -58,7 +58,7 @@ function clearResults() {
             output.classList.remove("fade-out");
             output.innerHTML = `
                 <div class="update-message">
-                    🔄 Plan updated. Please regenerate.
+                    Plan updated. Please regenerate.
                 </div>
             `;
         }, 400);
